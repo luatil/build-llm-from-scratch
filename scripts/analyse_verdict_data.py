@@ -1,9 +1,10 @@
+import re
+
 with open("data/the-verdict.txt", "r", encoding="utf-8") as f:
     raw_text = f.read()
 print("Total number of character:", len(raw_text))
 print(raw_text[:99])
 
-import re
 
 text = "Hello, world. This is a test"
 result = re.split(r"([,.]|\s)", text)
