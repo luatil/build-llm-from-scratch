@@ -5,11 +5,9 @@ from typing import Protocol, Sequence
 
 
 class Tokenizer(Protocol):
-    def encode(self, text: str) -> list[int]:
-        raise NotImplementedError
+    def encode(self, text: str) -> list[int]: ...
 
-    def decode(self, tokens: Sequence[int], errors="replace") -> str:
-        raise NotImplementedError
+    def decode(self, tokens: Sequence[int], errors="replace") -> str: ...
 
 
 class GPTDatasetV1(Dataset):
@@ -41,7 +39,7 @@ def create_dataloader_v1(
     stride: int = 128,
     shuffle: bool = True,
     drop_last: bool = True,
-    num_workers: bool = True,
+    num_workers: int = 0,
 ) -> DataLoader:
     tokenizer = tiktoken.get_encoding("gpt2")
     dataset = GPTDatasetV1(txt, tokenizer, max_length, stride)
@@ -53,23 +51,3 @@ def create_dataloader_v1(
         num_workers=num_workers,
     )
     return dataloader
-
-
-if __name__ == "__main__":
-    with open("data/the-verdict.txt", "r", encoding="utf-8") as f:
-        raw_text = f.read()
-    dataloader = create_dataloader_v1(
-        raw_text, batch_size=1, max_length=4, stride=1, shuffle=False
-    )
-    data_iter = iter(dataloader)
-    first_batch = next(data_iter)
-    print(f"{first_batch=}")
-    second_batch = next(data_iter)
-    print(f"{second_batch=}")
-    dataloader = create_dataloader_v1(
-        raw_text, batch_size=8, max_length=4, stride=4, shuffle=False
-    )
-    data_iter = iter(dataloader)
-    inputs, targets = next(data_iter)
-    print(f"{inputs=}")
-    print(f"{targets=}")
