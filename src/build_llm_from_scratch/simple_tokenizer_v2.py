@@ -28,20 +28,3 @@ class SimpleTokenizerV2:
         text = " ".join([self.int2str[i] for i in ids])
         text = re.sub(r'\s+([,.?!"()\'])', r"\1", text)
         return text
-
-
-if __name__ == "__main__":
-    with open("data/the-verdict.txt", "r", encoding="utf-8") as f:
-        raw_text = f.read()
-    vocab = build_vocab(raw_text)
-    tokenizer = SimpleTokenizerV2(vocab=vocab)
-    text = """It's the last he painted, you know,"
-            Mrs. Gisburn said with pardonable pride."""
-    ids = tokenizer.encode(text)
-    print(f"{ids=}")
-    print(f"{tokenizer.decode(ids)=}")
-    text1 = "Hello, do you like tea?"
-    text2 = "In the sunlit terraces of the palace."
-    text = " <|endoftext|> ".join((text1, text2))
-    print(f"{tokenizer.encode(text)=}")
-    print(f"{tokenizer.decode(tokenizer.encode(text))=}")

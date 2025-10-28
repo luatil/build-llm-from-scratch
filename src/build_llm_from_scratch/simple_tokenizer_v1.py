@@ -24,20 +24,3 @@ class SimpleTokenizerV1:
         text = " ".join([self.int2str[i] for i in ids])
         text = re.sub(r'\s+([,.?!"()\'])', r"\1", text)
         return text
-
-
-if __name__ == "__main__":
-    with open("data/the-verdict.txt", "r", encoding="utf-8") as f:
-        raw_text = f.read()
-    vocab = build_vocab(raw_text)
-    tokenizer = SimpleTokenizerV1(vocab=vocab)
-    text = """It's the last he painted, you know,"
-            Mrs. Gisburn said with pardonable pride."""
-    ids = tokenizer.encode(text)
-    print(f"{ids=}")
-    print(f"{tokenizer.decode(ids)=}")
-    try:
-        text = "Hello, do you like tea?"
-        print(f"{tokenizer.encode(text)=}")
-    except KeyError as e:
-        print(f"KeyError: {e}")
