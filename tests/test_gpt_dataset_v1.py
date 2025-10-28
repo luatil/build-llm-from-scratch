@@ -16,15 +16,19 @@ def test_create_dataloader_v1(raw_text: str):
         raw_text, batch_size=1, max_length=4, stride=1, shuffle=False
     )
     data_iter = iter(dataloader)
-    first_batch = next(data_iter)
-    assert [el.tolist() for el in first_batch] == snapshot(
-        [[[40, 367, 2885, 1464]], [[367, 2885, 1464, 1807]]]
-    )
+    inputs, targets = next(data_iter)
+    assert inputs.tolist() == snapshot([[40, 367, 2885, 1464]])
+    assert targets.tolist() == snapshot([[367, 2885, 1464, 1807]])
 
-    second_batch = next(data_iter)
-    assert [el.tolist() for el in second_batch] == snapshot(
-        [[[367, 2885, 1464, 1807]], [[2885, 1464, 1807, 3619]]]
+
+def test_create_dataloader_v1_batch_size_1_max_length_2_stride_2(raw_text: str):
+    dataloader = create_dataloader_v1(
+        raw_text, batch_size=1, max_length=2, stride=2, shuffle=False
     )
+    data_iter = iter(dataloader)
+    inputs, targets = next(data_iter)
+    assert inputs.tolist() == snapshot([[40, 367]])
+    assert targets.tolist() == snapshot([[367, 2885]])
 
 
 def test_create_dataloader_v1_bigger_batch_size(raw_text: str):
